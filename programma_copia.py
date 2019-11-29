@@ -4,6 +4,7 @@ Spyder Editor
 This is a temporary script file.
 """
 from astropy.io import fits
+from matplotlib.lines import Line2D
 import numpy as np 
 import math
 import sys, os
@@ -26,22 +27,19 @@ l = np.linspace(0,50,20)                         # ascisse latitudine
 fig, ax1 = plt.subplots()
 ax1.set_xlabel('Altitude / km', color = 'firebrick')
 ax1.set_ylabel('Rcutoff / GV')
-ax1.plot(h, geocutoff_cumani(h), '--', color = 'firebrick', label = 'Geomagnetic Latitude = 0 degrees')
+line1, = ax1.plot(h, geocutoff_cumani(h), '--', color = 'firebrick', label = 'Geomagnetic Latitude = 0 degrees')
 ax1.tick_params(axis='x', labelcolor = 'firebrick')
 
 ax2 = ax1.twiny()
 
 color_blue = 'tab:blue'
 ax2.set_xlabel('Geomagnetic Latitude / degrees', color = color_blue)
-ax2.plot(l, geocutoff_cumani2(l), color = color_blue, label = 'Altitude = 550 km')
+line2, = ax2.plot(l, geocutoff_cumani2(l), color = color_blue, label = 'Altitude = 550 km')
 ax2.tick_params(axis='x', labelcolor = color_blue)
-
 ax1.grid(axis = 'y')
 ax1.legend((line1, line2), ('Geomagnetic Latitude = 0 degrees', 'Altitude = 550 km'))
 fig.tight_layout()                               # facoltativo: allunga un pelo il grafico
 plt.show()
-
-
 
 
 
@@ -56,7 +54,6 @@ plt.show()
 #    g3 = (np.cos(l*np.pi/180)**4)
 #    geocut_l = g1*g2*g3
 #    return geocut_l
-
 #def geocutoff_h(h):                     #funzione x geocutoff a l costante
 #    l_const = 0*np.pi/180               #0°
 #    g10 = 29442.0*10**(-9)              
@@ -66,7 +63,6 @@ plt.show()
 #    g3 = (np.cos(l_const)**4)
 #    geocut_h = g1*g2*g3                 #inserito lo stesso g3 anche se = 1 per l=0° x eventuali modifiche future
 #    return geocut_h
-
 #def unmod_proton_flux(Ek):
 #    Ek_converter = Ek*10**9            #converte i GeV in eV
 #    E0 = 938*10**6                     #energia a riposo del protone
@@ -77,7 +73,6 @@ plt.show()
 #    Rigidity = ((AZ/e)**2)*(Ek_converter*(Ek_converter + 2 * E0))**(0.5)
 #    unmod_Pflux = A * (Rigidity)**(-a)
 #    return unmod_Pflux
-
 #def solarmod_proton_flux(Ek):
 #    Ek_converter = Ek*10**9            #converte i GeV in eV
 #    phi = 800*10**6                    #modulazione solare (V)
@@ -94,7 +89,6 @@ plt.show()
 #    solar_modulation = ((Ek_converter + Mc)**2 - (Mc)**2)/(((Ek_converter + Mc + e*phi)**2)-(Mc)**2)
 #    solarmod_Pflux = unmod_Pflux*solar_modulation
 #    return solarmod_Pflux
-
 #def modulated_proton_flux(Ek):
 #    Ek_converter = Ek*10**9            #converte i GeV in eV
 #    phi = 800*10**6                    #modulazione solare (V)
@@ -115,7 +109,6 @@ plt.show()
 #    solar_modulation = ((Ek_converter + Mc)**2 - (Mc)**2)/(((Ek_converter + Mc + e*phi)**2)-(Mc)**2)
 #    modulated_Pflux = solar_modulation * (1/(1+(Rigidity/R_cutoff))**(-r))
 #    return modulated_Pflux
-
 for i in [h]:                          #grafico zoom geocutoff a l costante
     plt.plot(h, geocutoff_h(h))
     plt.show()
@@ -149,12 +142,8 @@ for i in [h]:                          #grafico zoom geocutoff a l costante
 #print (solar_modulation)
 #print (aaa)
 #print (ciao)
-
 #Ek = np.linspace(0.001,100)            #range energie cinetiche
-
 #for i in [l]:                          #grafico generale
 #    plt.plot(l, geocutoff_l(l), geocutoff_h(h))
 #    plt.show()
-
 """
-    
