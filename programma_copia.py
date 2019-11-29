@@ -20,9 +20,31 @@ def geocutoff_cumani2(l):
     l_rad = l*np.pi/180
     return (11.9*np.cos(l_rad)**4)               # equazione alleggerita ((num/den) = 1)
 
+def proton_flux(T):
+    C = 0.4544                                   # fattore di normalizzazione
+    gamma = -2.849                               # costante
+    dlt_gamma = 0.133                            # costante
+    s = 0.024                                    # smoothness of transition (?)
+    R0 = 336                                     # GV
+    A = 1                                        # numero di massa protone
+    Z = 1                                        # numero atomico protone
+    T0 = 938.25*10**(-3)                         # energia a riposo protone (GeV)
+    M0 = 1.6726219*10**(-27)                     # massa protone
+    arg = (T**2 + 2*T*T0)**(0.5)
+    arg_out = (T**2 + 2*T*M0)**(0.5)
+    
+    R = (A/Z)*arg
+    R_out = arg_out = (T**2 + 2*T*M0)**(0.5)
+    F = ((C*(R/45)**gamma)*(1+(R/R0)**(dlt_gamma/s))**s)*R_out**2.7
+    
+    return (F)
+
+
    
-h = np.linspace(400,600,20)                      # ascisse altitudine
-l = np.linspace(0,50,20)                         # ascisse latitudine
+h = np.linspace(400,600,20)                       # ascisse altitudine
+l = np.linspace(0,50,20)                          # ascisse latitudine
+T = np.logspace(2,3,base=10.0)                    # ascisse energia cinetica (GeV)
+#T = np.linspace(1,100000,10)
 
 fig, ax1 = plt.subplots()
 ax1.set_xlabel('Altitude / km', color = 'firebrick')
@@ -38,11 +60,10 @@ line2, = ax2.plot(l, geocutoff_cumani2(l), color = color_blue, label = 'Altitude
 ax2.tick_params(axis='x', labelcolor = color_blue)
 ax1.grid(axis = 'y')
 ax1.legend((line1, line2), ('Geomagnetic Latitude = 0 degrees', 'Altitude = 550 km'))
-fig.tight_layout()                               # facoltativo: allunga un pelo il grafico
+fig.tight_layout()                                # facoltativo: allunga un pelo il grafico
 plt.show()
 
-
-
+plt.plot (T, proton_flux(T))
 
 """    
 #def geocutoff_l(l):                      #funzione x geocutoff a h costante
