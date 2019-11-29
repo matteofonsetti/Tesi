@@ -10,29 +10,38 @@ import sys, os
 import matplotlib.pyplot as plt
 
 
-
-def geocutoff_cumani(h):                         #cutoff a latitudine costante
-    l_const = 0*np.pi/180                        #latitudine 0° in radianti
-    R_earth = 6371                               #km
+def geocutoff_cumani(h):                         # cutoff a latitudine costante
+    l_const = 0*np.pi/180                        # latitudine 0° in radianti
+    R_earth = 6371                               # km
     return ((11.9*((R_earth+550)/(R_earth+h))**2)*np.cos(l_const)**4)
 
 def geocutoff_cumani2(l):
     l_rad = l*np.pi/180
-    return (11.9*np.cos(l_rad)**4)               #equazione assottigliata ((num/den) = 1)
-    
+    return (11.9*np.cos(l_rad)**4)               # equazione alleggerita ((num/den) = 1)
 
+   
+h = np.linspace(400,600,20)                      # ascisse altitudine
+l = np.linspace(0,50,20)                         # ascisse latitudine
 
-    
-    
-h = np.linspace(400,600,20)               #ascisse altitudine
-l = np.linspace(0,50,20)                  #ascisse latitudine
-print len(h)
-print len(l)
+fig, ax1 = plt.subplots()
+ax1.set_xlabel('Altitude / km', color = 'firebrick')
+ax1.set_ylabel('Rcutoff / GV')
+ax1.plot(h, geocutoff_cumani(h), '--', color = 'firebrick', label = 'Geomagnetic Latitude = 0 degrees')
+ax1.tick_params(axis='x', labelcolor = 'firebrick')
 
-plt.plot(h,geocutoff_cumani(h))
+ax2 = ax1.twiny()
+
+color_blue = 'tab:blue'
+ax2.set_xlabel('Geomagnetic Latitude / degrees', color = color_blue)
+ax2.plot(l, geocutoff_cumani2(l), color = color_blue, label = 'Altitude = 550 km')
+ax2.tick_params(axis='x', labelcolor = color_blue)
+
+ax1.grid(axis = 'y')
+ax1.legend((line1, line2), ('Geomagnetic Latitude = 0 degrees', 'Altitude = 550 km'))
+fig.tight_layout()                               # facoltativo: allunga un pelo il grafico
 plt.show()
-plt.plot(l,geocutoff_cumani2(l))
-plt.show()
+
+
 
 
 
